@@ -93,5 +93,5 @@ void main() {
         }
     }
 
-    fragColor = color;
+    fragColor = vec4(color.rgb, 1.0);
 }

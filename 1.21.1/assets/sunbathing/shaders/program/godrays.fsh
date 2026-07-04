@@ -166,9 +166,11 @@ void main() {
     }
 
     float depth = getDepth(texCoord);
-    float geometryMask = smoothstep(1.0, 0.999999, depth);
+    // Old depth: sky ~1.0, geometry < 1. Same role as reversed-Z smoothstep(0, epsilon, depth):
+    // composite rays onto terrain silhouettes, not open sky / sun disc / background.
+    float geometryMask = 1.0 - step(0.999999, depth);
 
     color.rgb += rays * geometryMask;
 
-    fragColor = color;
+    fragColor = vec4(color.rgb, 1.0);
 }
