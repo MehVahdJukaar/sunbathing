@@ -1,0 +1,21 @@
+{
+  "pack": {
+    "pack_format": 75,
+    "description": [
+      "§6GODRAYS §r§8v1.2",
+      "§7by MehVahdJukaar"
+
+    ],
+    "min_format": 69,
+    "max_format": 90
+  },
+  "overlays": {
+    "entries": [
+      {
+        "min_format": 88,
+        "max_format": 90,
+        "directory": "reversed_z"
+      }
+    ]
+  }
+}
