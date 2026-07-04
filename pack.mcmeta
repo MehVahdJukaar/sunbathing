@@ -12,6 +12,7 @@
   "overlays": {
     "entries": [
       {
+
         "min_format": 88,
         "max_format": 90,
         "directory": "reversed_z"
