@@ -1,0 +1,23 @@
+{
+    "blend": { "func": "add", "srcrgb": "one", "dstrgb": "zero" },
+    "vertex": "screenquad",
+    "fragment": "sunbathing:godrays",
+    "attributes": [ "Position" ],
+    "samplers": [
+        { "name": "DiffuseSampler" },
+        { "name": "InDepth" }
+    ],
+    "uniforms": [
+        { "name": "ProjMat",          "type": "matrix4x4", "count": 16, "values": [ 1.0,0.0,0.0,0.0, 0.0,1.0,0.0,0.0, 0.0,0.0,1.0,0.0, 0.0,0.0,0.0,1.0 ] },
+        { "name": "InSize",           "type": "float", "count": 2, "values": [ 1.0, 1.0 ] },
+        { "name": "OutSize",          "type": "float", "count": 2, "values": [ 1.0, 1.0 ] },
+        { "name": "PolyProjMat",      "type": "matrix4x4", "count": 16, "values": [ 1.0,0.0,0.0,0.0, 0.0,1.0,0.0,0.0, 0.0,0.0,1.0,0.0, 0.0,0.0,0.0,1.0 ] },
+        { "name": "PolyModelViewMat", "type": "matrix4x4", "count": 16, "values": [ 1.0,0.0,0.0,0.0, 0.0,1.0,0.0,0.0, 0.0,0.0,1.0,0.0, 0.0,0.0,0.0,1.0 ] },
+        { "name": "PolySunAngle",     "type": "float", "count": 1, "values": [ 0.0 ] },
+        { "name": "SunRayIntensity",  "type": "float", "count": 1, "values": [ 1.0 ] },
+        { "name": "MoonRayIntensity", "type": "float", "count": 1, "values": [ 1.0 ] },
+        { "name": "RayQuality",       "type": "float", "count": 1, "values": [ 30.0 ] },
+        { "name": "RayDensity",       "type": "float", "count": 1, "values": [ 0.92 ] },
+        { "name": "RayDecay",         "type": "float", "count": 1, "values": [ 0.99 ] }
+    ]
+}

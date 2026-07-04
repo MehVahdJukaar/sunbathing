@@ -1,0 +1,12 @@
+{
+  "activation_condition": "config('sunbathing:lens_flare') > 0 && g.skyType()==1 && g.rain()<=0.1",
+  "post_chain": "sunbathing:lens_flare",
+  "use_depth_buffer": true,
+  "priority": 1.0,
+  "expression_uniforms": {
+    "FlareStrength": "config('sunbathing:lens_flare')"
+  },
+  "samplers": {
+    "LensFlare": "sunbathing:textures/effect/lens_flare.png"
+  }
+}
