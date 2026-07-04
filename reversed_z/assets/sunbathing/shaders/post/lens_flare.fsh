@@ -2,6 +2,7 @@
 
 uniform sampler2D InSampler;
 uniform sampler2D InDepthSampler;
+uniform sampler2D LensFlareSampler; // "nova" flare sprite (grayscale on black), CC0 via OpenGameArt
 
 in vec2 texCoord;
 out vec4 fragColor;
@@ -20,10 +21,9 @@ layout (std140) uniform PolyGlobals {
 const float PI = 3.14159265;
 const float TRANSITION_WIDTH = radians(12.0);
 
-// --- Single rainbow iris ring (subtle, cinematic) ---
-const float RING_POS = 1.15;       // ring position along the sun -> screen-center axis (past center)
-const float RING_RADIUS = 0.12;    // medium ring radius (fraction of screen height)
-const float RING_THICKNESS = 0.045;// width of the rainbow band
+// --- Single textured lens flare, centred on the sun ---
+const float FLARE_HALF = 0.35;                  // sprite half-size, as a fraction of screen height
+const vec3  FLARE_TINT = vec3(1.0, 0.93, 0.80); // warm, sun-lit white
 
 // Overall intensity, driven by the "Lens Flare" config slider (0..1) via expression_uniforms.
 layout(std140) uniform FlareStrength { float uFlareStrength; };
@@ -46,16 +46,6 @@ vec3 getSunScreenPos() {
     vec4 clip = PolyProjMat * (PolyModelViewMat * vec4(lightPos, 1.0));
     if (clip.w <= 0.0) return vec3(0.0, 0.0, -1.0);
     return vec3((clip.xy / clip.w) * 0.5 + 0.5, clip.w);
-}
-
-// smooth hue ramp: 0 = red, 0.33 = green, 0.66 = blue, 1 = red
-vec3 spectrum(float t) {
-    t = clamp(t, 0.0, 1.0);
-    return clamp(vec3(
-        abs(t * 6.0 - 3.0) - 1.0,
-        2.0 - abs(t * 6.0 - 2.0),
-        2.0 - abs(t * 6.0 - 4.0)
-    ), 0.0, 1.0);
 }
 
 // 1.0 where the sampled pixel is open sky.
@@ -90,20 +80,16 @@ void main() {
         float gate = sunW * edgeFade * visible;
 
         if (gate > 0.0) {
-            // one medium iris ring, placed along the sun -> center axis (parallaxes as you look around)
-            vec2 toCenter = vec2(0.5) - sunUV;
-            vec2 ringCenter = sunUV + toCenter * RING_POS;
+            // map the pixel into the flare sprite's [0,1] space, kept square via the aspect ratio
+            vec2 d = texCoord - sunUV;
+            d.x *= aspect;
+            vec2 flareUV = d / (2.0 * FLARE_HALF) + 0.5;
 
-            vec2 cd = texCoord - ringCenter;
-            cd.x *= aspect;
-            float dist = length(cd);
-
-            float x = (dist - RING_RADIUS) / RING_THICKNESS;  // -1 inner .. +1 outer edge
-            float band = 1.0 - smoothstep(0.0, 1.0, abs(x));  // bright at the ring, fades off the band
-            vec3 rainbow = spectrum((x * 0.5 + 0.5) * 0.75);  // red (inner) -> blue (outer)
-
-            // slider 1.0 -> 0.2 strength (0.5 -> 0.1, a subtle default), keeping headroom
-            color.rgb += rainbow * band * (uFlareStrength * 0.2) * gate;
+            if (all(greaterThanEqual(flareUV, vec2(0.0))) && all(lessThanEqual(flareUV, vec2(1.0)))) {
+                // grayscale sprite -> additive warm glow, gated by day/occlusion/edge and the slider
+                float flare = texture(LensFlareSampler, flareUV).r;
+                color.rgb += FLARE_TINT * flare * (uFlareStrength * 0.6) * gate;
+            }
         }
     }
 

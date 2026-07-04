@@ -3,5 +3,8 @@
   "post_chain": "sunbathing:lens_flare",
   "expression_uniforms": {
     "FlareStrength": "config('sunbathing:lens_flare')"
+  },
+  "samplers": {
+    "LensFlare": "sunbathing:textures/effect/lens_flare.png"
   }
 }
