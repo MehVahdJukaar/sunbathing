@@ -2,7 +2,7 @@
   "pack": {
     "pack_format": 75,
     "description": [
-      "§6GODRAYS §r§8v1.4",
+      "§6GODRAYS §r§8v1.5",
       "§7by MehVahdJukaar"
 
     ],
@@ -14,7 +14,7 @@
     "entries": [
       {
         "directory": "reversed_z",
-        "formats": [0, 0],
+        "formats": [88, 90],
         "min_format": 88,
         "max_format": 90
       },
