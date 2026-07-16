@@ -1,0 +1,13 @@
+{
+  "activation_condition": "config('sunbathing:shadows_enabled') && g.skyType()==1",
+  "post_chain": "sunbathing:shadows",
+  "use_depth_buffer": true,
+  "use_shadow_map": true,
+  "priority": 0.0,
+  "expression_uniforms": {
+    "ShadowStrength": "config('sunbathing:shadow_intensity')",
+    "ShadowBias": "0.0006",
+    "NormalOffset": "0.12",
+    "PixelGridRes": "config('sunbathing:shadow_pixelation')"
+  }
+}
