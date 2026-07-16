@@ -1,4 +1,10 @@
 {
+  "config.sunbathing.shadows_enabled": "§eShadows",
+  "config.sunbathing.shadows_enabled.tooltip": "Cast dynamic sun & moon shadows on the world. Experimental - costs performance.",
+  "config.sunbathing.shadow_intensity": "Shadow Intensity",
+  "config.sunbathing.shadow_intensity.tooltip": "How dark shadows get (0 = invisible, 1 = black).",
+  "config.sunbathing.shadow_pixelation": "Shadow Pixelation",
+  "config.sunbathing.shadow_pixelation.tooltip": "Snap shadow edges to a block grid. 0 = smooth, 16 = block-sized pixels, higher = finer.",
   "config.sunbathing.enabled": "§6God Rays",
   "config.sunbathing.enabled.tooltip": "Toggle sun & moon god rays.",
   "config.sunbathing.sun_intensity": "Sun Ray Intensity",

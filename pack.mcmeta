@@ -23,6 +23,15 @@
         "formats": [34, 34],
         "min_format": 34,
         "max_format": 34
+      },
+      {
+        "polytone_condition": {
+          "require_config": "sunbathing:shadows_enabled"
+        },
+        "directory": "1.21.1_shadows_on",
+        "formats": [34, 34],
+        "min_format": 34,
+        "max_format": 34
       }
     ]
   }
