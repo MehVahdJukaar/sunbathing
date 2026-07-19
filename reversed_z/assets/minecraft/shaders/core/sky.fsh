@@ -65,7 +65,13 @@ void main() {
     // upper hemisphere only; fade the layer in above the horizon (also skips the
     // lower "sky dark" disc, which has a negative elevation)
     float horizon = smoothstep(0.02, 0.30, elevation);
-    float amount = clamp(uCloudsEnabled, 0.0, 1.0) * horizon;
+    // Hard binary enable gate. Clouds are opt-in (config default off). If Polytone never
+    // binds this UBO - uniforms not reaching the shader, e.g. some Sodium / underwater
+    // paths - it reads 0, so clouds stay off, which is the safe default. Using step()
+    // instead of a soft clamp() fade also means a stray partial value can't bleed through
+    // as sky noise: it's either fully on or fully off.
+    float enabled = step(0.5, uCloudsEnabled);
+    float amount = enabled * horizon;
 
     float cloudMask = 0.0;
 
