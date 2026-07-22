@@ -4,7 +4,7 @@
   "use_shadow_map": true,
   "expression_uniforms": {
     "ShadowStrength": "config('sunbathing:shadow_intensity')",
-    "ShadowBias": "0.0006",
+    "ShadowBias": "0.0001",
     "NormalOffset": "0.12",
     "PixelGridRes": "config('sunbathing:shadow_pixelation')"
   }
