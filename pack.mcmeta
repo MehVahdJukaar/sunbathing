@@ -10,6 +10,30 @@
     "min_format": 34,
     "max_format": 90
   },
+  "polytone": {
+    "title": {
+      "text": "",
+      "extra": [
+        { "text": "GODRAYS", "color": "gold", "bold": true },
+        { "text": " v1.8", "color": "dark_gray" },
+        { "text": "\nby MehVahdJukaar", "color": "gray" }
+      ]
+    },
+    "content": {
+      "text": "",
+      "extra": [
+        { "text": "Volumetric godrays and soft shadows for the vanilla sky.\n", "color": "white" },
+        { "text": "Shadows can be turned off from the config button on this screen.\n\n" },
+        {
+          "text": "Discord",
+          "color": "#5865F2",
+          "underlined": true,
+          "click_event": { "action": "open_url", "url": "https://discord.com/invite/qdKRTDf8Cv" },
+          "hover_event": { "action": "show_text", "value": "Get help and post screenshots" }
+        }
+      ]
+    }
+  },
   "overlays": {
     "entries": [
       {
