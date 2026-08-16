@@ -8,9 +8,7 @@ in vec3 Position;
 
 out float sphericalVertexDistance;
 out float cylindricalVertexDistance;
-// camera-relative sky-disc position, forwarded to the fragment stage so we can
-// project a flat cloud plane in world-aligned space (see sky.fsh).
-out vec3 skyPos;
+out vec3 skyPos; // camera-relative, sky.fsh projects the cloud plane from it
 
 void main() {
     gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);

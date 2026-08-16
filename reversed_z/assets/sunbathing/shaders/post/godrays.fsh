@@ -27,15 +27,12 @@ layout(std140) uniform Globals {
     int UseRgss;
 };
 
-// Expression-driven config uniforms. Each block is filled from a Polytone config slider
-// via expression_uniforms in polytone/post_shaders/godrays.json (see config_entries/).
 layout(std140) uniform SunRayIntensity  { float uSunRayIntensity; };
 layout(std140) uniform MoonRayIntensity { float uMoonRayIntensity; };
 layout(std140) uniform RayQuality       { float uRayQuality; };
 layout(std140) uniform RayDensity       { float uRayDensity; };
 layout(std140) uniform RayDecay         { float uRayDecay; };
 
-// --- CONFIGURATION (fixed) ---
 const float Exposure = 0.25;
 const float Weight = 0.25;
 
@@ -45,24 +42,13 @@ const float SunGlow = 0.4;
 const float PI = 3.14159265;
 const float TRANSITION_WIDTH = radians(12.0);
 
-// Colors
-const vec3 SUN_CORE = vec3(1.0, 1.0, 0.9);
 const vec3 SUN_GLOW = vec3(1.0, 0.7, 0.3);
-const vec3 MOON_CORE = vec3(0.8, 0.9, 1.0);
 const vec3 MOON_GLOW = vec3(0.5, 0.6, 1.0);
 
-// --- NOISE ---
-float interleaved_gradient_noise(vec2 uv) {
+float interleavedGradientNoise(vec2 uv) {
     return fract(52.9829189 * fract(dot(uv, vec2(0.06711056, 0.00583715))));
 }
 
-// --- DEPTH ---
-float getDepth(vec2 pos) {
-    return texture(InDepthSampler, pos).r;
-}
-
-
-// ----------------------------------------------------------------------
 vec3 getLightScreenPos(float angle, out float screenFade) {
     vec3 dir = vec3(cos(angle), sin(angle), 0.0);
 
@@ -84,7 +70,6 @@ vec3 getLightScreenPos(float angle, out float screenFade) {
     return vec3(uv, clip.w);
 }
 
-// ----------------------------------------------------------------------
 float getSunShape(vec2 uv, vec2 lightUV, float aspect) {
     vec2 d = uv - lightUV;
     d.x *= aspect;
@@ -97,14 +82,13 @@ float getSunShape(vec2 uv, vec2 lightUV, float aspect) {
     return core + glow;
 }
 
-// ----------------------------------------------------------------------
 vec3 computeGodRays(vec2 lightUV, float screenFade, vec3 lightColor, float aspect) {
     if (screenFade <= 0.0) return vec3(0.0);
 
     int samples = max(1, int(uRayQuality));
     vec2 delta = (texCoord - lightUV) * (1.0 / float(samples)) * uRayDensity;
 
-    float noise = interleaved_gradient_noise(gl_FragCoord.xy);
+    float noise = interleavedGradientNoise(gl_FragCoord.xy);
     vec2 coord = texCoord + delta * noise;
 
     vec3 acc = vec3(0.0);
@@ -113,7 +97,6 @@ vec3 computeGodRays(vec2 lightUV, float screenFade, vec3 lightColor, float aspec
     for (int i = 0; i < samples; ++i) {
         coord -= delta;
 
-        // Branchless border mask
         vec2 b0 = smoothstep(vec2(0.0), vec2(0.08), coord);
         vec2 b1 = smoothstep(vec2(1.0), vec2(0.92), coord);
         float borderMask = b0.x * b0.y * b1.x * b1.y;
@@ -122,8 +105,6 @@ vec3 computeGodRays(vec2 lightUV, float screenFade, vec3 lightColor, float aspec
 
         float shape = getSunShape(coord, lightUV, aspect);
 
-        // 26.2 reversed-Z: far plane / sky clears to 0.0 (was 1.0), near = 1.0.
-        // Sky is where depth <= epsilon.
         float light = step(depth, 0.000001) * shape;
 
         acc += lightColor * light * decayAcc * Weight * borderMask;
@@ -134,7 +115,6 @@ vec3 computeGodRays(vec2 lightUV, float screenFade, vec3 lightColor, float aspec
     return acc * Exposure * screenFade;
 }
 
-// ----------------------------------------------------------------------
 void getLightWeights(float angle, out float sunW, out float moonW) {
     float t = mod(angle + PI, 2.0 * PI);
 
@@ -153,7 +133,6 @@ void getLightWeights(float angle, out float sunW, out float moonW) {
     moonW = 1.0 - sunW;
 }
 
-// ----------------------------------------------------------------------
 void main() {
     vec4 color = texture(InSampler, texCoord);
 
@@ -166,18 +145,17 @@ void main() {
 
     if (sunW > 0.0) {
         float fade;
-        vec3 data = getLightScreenPos(PolySunAngle, fade);
-        rays += computeGodRays(data.xy, fade, SUN_GLOW, aspect) * sunW * uSunRayIntensity;
+        vec3 sunPos = getLightScreenPos(PolySunAngle, fade);
+        rays += computeGodRays(sunPos.xy, fade, SUN_GLOW, aspect) * sunW * uSunRayIntensity;
     }
 
     if (moonW > 0.0) {
         float fade;
-        vec3 data = getLightScreenPos(PolySunAngle + PI, fade);
-        rays += computeGodRays(data.xy, fade, MOON_GLOW, aspect) * moonW * uMoonRayIntensity;
+        vec3 moonPos = getLightScreenPos(PolySunAngle + PI, fade);
+        rays += computeGodRays(moonPos.xy, fade, MOON_GLOW, aspect) * moonW * uMoonRayIntensity;
     }
 
-    float depth = getDepth(texCoord);
-    // 26.2 reversed-Z: geometry has depth > 0, sky is depth ~ 0.0. Mask keeps rays over geometry.
+    float depth = texture(InDepthSampler, texCoord).r;
     float geometryMask = smoothstep(0.0, 0.000001, depth);
 
     color.rgb += rays * geometryMask;
