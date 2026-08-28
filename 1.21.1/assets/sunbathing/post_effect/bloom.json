@@ -1,0 +1,39 @@
+{
+    "targets": [ "bloom_a", "bloom_b", "swap" ],
+    "passes": [
+        {
+            "name": "sunbathing:bloom_extract",
+            "intarget": "minecraft:main",
+            "outtarget": "bloom_a"
+        },
+        {
+            "name": "sunbathing:bloom_blur",
+            "intarget": "bloom_a",
+            "outtarget": "bloom_b",
+            "uniforms": [
+                { "name": "BlurDir", "values": [ 1.0, 0.0 ] }
+            ]
+        },
+        {
+            "name": "sunbathing:bloom_blur",
+            "intarget": "bloom_b",
+            "outtarget": "bloom_a",
+            "uniforms": [
+                { "name": "BlurDir", "values": [ 0.0, 1.0 ] }
+            ]
+        },
+        {
+            "name": "sunbathing:bloom_composite",
+            "intarget": "minecraft:main",
+            "outtarget": "swap",
+            "auxtargets": [
+                { "name": "BloomSampler", "id": "bloom_a" }
+            ]
+        },
+        {
+            "name": "sunbathing:copy",
+            "intarget": "swap",
+            "outtarget": "minecraft:main"
+        }
+    ]
+}

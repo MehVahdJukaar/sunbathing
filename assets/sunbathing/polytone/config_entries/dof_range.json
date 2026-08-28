@@ -1,0 +1,9 @@
+{
+  "default_value": 12.0,
+  "min": 1.0,
+  "max": 64.0,
+  "step": 1.0,
+  "section": "dof",
+  "display_order": 41,
+  "performance_impact": "low"
+}

@@ -1,0 +1,10 @@
+{
+  "activation_condition": "config('sunbathing:dof') > 0",
+  "post_chain": "sunbathing:dof",
+  "use_depth_buffer": true,
+  "priority": 2,
+  "expression_uniforms": {
+    "DofStrength": "config('sunbathing:dof')",
+    "DofRange": "config('sunbathing:dof_range')"
+  }
+}

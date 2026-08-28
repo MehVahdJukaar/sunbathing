@@ -1,0 +1,15 @@
+{
+    "targets": [ "swap" ],
+    "passes": [
+        {
+            "name": "sunbathing:dof",
+            "intarget": "minecraft:main",
+            "outtarget": "swap"
+        },
+        {
+            "name": "sunbathing:copy",
+            "intarget": "swap",
+            "outtarget": "minecraft:main"
+        }
+    ]
+}

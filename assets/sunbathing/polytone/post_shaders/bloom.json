@@ -1,0 +1,8 @@
+{
+  "activation_condition": "config('sunbathing:bloom') > 0",
+  "post_chain": "sunbathing:bloom",
+  "expression_uniforms": {
+    "BloomStrength": "config('sunbathing:bloom')",
+    "BloomThreshold": "config('sunbathing:bloom_threshold')"
+  }
+}
