@@ -29,5 +29,15 @@
   "config.sunbathing.cloud_scale": "Cloud Scale",
   "config.sunbathing.cloud_scale.tooltip": "Size of the cloud pattern. Lower is bigger, puffier clouds.",
   "config.sunbathing.cloud_speed": "Cloud Speed",
-  "config.sunbathing.cloud_speed.tooltip": "How fast the clouds drift across the sky."
+  "config.sunbathing.cloud_speed.tooltip": "How fast the clouds drift across the sky.",
+  "config.sunbathing.section.bloom": "§dBloom",
+  "config.sunbathing.bloom": "Bloom Intensity",
+  "config.sunbathing.bloom.tooltip": "Glow around bright pixels. 0 turns bloom off.",
+  "config.sunbathing.bloom_threshold": "Bloom Threshold",
+  "config.sunbathing.bloom_threshold.tooltip": "How bright a pixel must be before it glows. Lower makes more of the scene bloom.",
+  "config.sunbathing.section.dof": "§9Depth of Field",
+  "config.sunbathing.dof": "Blur Amount",
+  "config.sunbathing.dof.tooltip": "Blurs things farther away than what you are looking at. 0 turns it off.",
+  "config.sunbathing.dof_range": "Focus Range",
+  "config.sunbathing.dof_range.tooltip": "How many blocks past your focus point stay sharp before the blur ramps in."
 }
