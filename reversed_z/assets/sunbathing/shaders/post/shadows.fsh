@@ -63,7 +63,7 @@ void main() {
     float facing = smoothstep(0.0, 0.05, ndotl);
 
     float uvPerBlock = length(vec3(PolyShadowMat[0][0], PolyShadowMat[1][0], PolyShadowMat[2][0])) * 0.5;
-    float zPerBlock = length(vec3(PolyShadowMat[0][2], PolyShadowMat[1][2], PolyShadowMat[2][2])) * 0.5;
+    float zPerBlock = length(vec3(PolyShadowMat[0][2], PolyShadowMat[1][2], PolyShadowMat[2][2]));
     float texelWorld = (1.0 / float(textureSize(InShadow, 0).x)) / max(uvPerBlock, 1e-6);
 
     float cell = 0.0;
@@ -81,10 +81,11 @@ void main() {
 
     vec4 lightClip = PolyShadowMat * vec4(samplePos, 1.0);
     vec3 proj = lightClip.xyz / lightClip.w;
-    vec3 suv = proj * 0.5 + 0.5;
+    // light depth is reversed too: 1 at the light, 0 at the far end
+    vec3 suv = vec3(proj.xy * 0.5 + 0.5, proj.z);
 
     vec2 fromCenter = abs(suv.xy - 0.5) * 2.0;
-    float coverageFade = 1.0 - smoothstep(0.85, 1.0, max(max(fromCenter.x, fromCenter.y), suv.z));
+    float coverageFade = 1.0 - smoothstep(0.85, 1.0, max(max(fromCenter.x, fromCenter.y), 1.0 - suv.z));
 
     float shadow = 0.0;
     if (coverageFade > 0.0) {
@@ -98,7 +99,7 @@ void main() {
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 float occluder = texture(InShadow, suv.xy + vec2(dx, dy) * texel).r;
-                shadow += (suv.z - bias > occluder) ? 1.0 : 0.0;
+                shadow += (suv.z + bias < occluder) ? 1.0 : 0.0;
             }
         }
         shadow /= 9.0;
