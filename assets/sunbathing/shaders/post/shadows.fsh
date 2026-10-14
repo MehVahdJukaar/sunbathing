@@ -1,9 +1,5 @@
 #version 330
 
-// Directional shadow resolve, classic depth (sky = 1.0, NDC z in [-1,1]). The reversed_z overlay ships its own copy.
-// Rebuilds each pixel's camera-relative position from the level depth, projects it into the light's clip space and
-// compares against the light-POV depth map Polytone rendered (InShadow / PolyShadow).
-
 uniform sampler2D InSampler;
 uniform sampler2D InDepthSampler;
 uniform sampler2D InShadow;
@@ -23,7 +19,6 @@ layout(std140) uniform PolyShadow {
     vec3 PolyShadowCamFract;
 };
 
-// from expression_uniforms in polytone/post_shaders/shadows.json
 layout(std140) uniform ShadowStrength { float uShadowStrength; };
 layout(std140) uniform ShadowBias     { float uShadowBias; };
 layout(std140) uniform NormalOffset   { float uNormalOffset; };
@@ -48,7 +43,6 @@ void main() {
     vec3 normal = normalize(cross(ddx, ddy));
     if (dot(normal, worldRel) > 0.0) normal = -normal;
 
-    // silhouettes give a garbage normal (derivative quad straddles two depths); without this distant clouds get dark rims
     float normalTrust = smoothstep(0.05, 0.2, abs(dot(normal, normalize(worldRel))));
 
     vec3 absNormal = abs(normal);
@@ -72,7 +66,6 @@ void main() {
         cell *= exp2(max(0.0, ceil(log2(max(footprint * 1.5 / cell, 1e-6)))));
     }
 
-    // offset before snapping: surfaces lie on grid lines, an un-offset snap would coin-flip into self-shadow
     vec3 samplePos = worldRel + normal * (uNormalOffset * (1.0 + 2.0 * slope) + footprint);
 
     if (cell > 0.0) {
@@ -89,7 +82,6 @@ void main() {
     float shadow = 0.0;
     if (coverageFade > 0.0) {
 
-        // receiver-slope bias, without it distant grazing surfaces self-shadow in stripes
         float tanTheta = min(sqrt(max(1.0 - ndotl * ndotl, 0.0)) / max(ndotl, 0.05), 16.0);
         float lateral = texelWorld + 0.5 * cell + footprint;
         float bias = uShadowBias * (1.0 + 6.0 * slope) + lateral * tanTheta * zPerBlock;

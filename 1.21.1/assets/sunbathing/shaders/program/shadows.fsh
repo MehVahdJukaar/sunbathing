@@ -1,7 +1,5 @@
 #version 150
 
-// 1.21.1 port of the base shadows.fsh (GLSL 150, plain uniforms, vanilla PostPass names).
-
 uniform sampler2D DiffuseSampler;
 uniform sampler2D InDepth;
 uniform sampler2D InShadow;
@@ -39,7 +37,6 @@ void main() {
     vec3 normal = normalize(cross(ddx, ddy));
     if (dot(normal, worldRel) > 0.0) normal = -normal;
 
-    // silhouettes give a garbage normal (derivative quad straddles two depths); without this distant clouds get dark rims
     float normalTrust = smoothstep(0.05, 0.2, abs(dot(normal, normalize(worldRel))));
 
     vec3 absNormal = abs(normal);
@@ -63,7 +60,6 @@ void main() {
         cell *= exp2(max(0.0, ceil(log2(max(footprint * 1.5 / cell, 1e-6)))));
     }
 
-    // offset before snapping: surfaces lie on grid lines, an un-offset snap would coin-flip into self-shadow
     vec3 samplePos = worldRel + normal * (NormalOffset * (1.0 + 2.0 * slope) + footprint);
 
     if (cell > 0.0) {
@@ -80,7 +76,6 @@ void main() {
     float shadow = 0.0;
     if (coverageFade > 0.0) {
 
-        // receiver-slope bias, without it distant grazing surfaces self-shadow in stripes
         float tanTheta = min(sqrt(max(1.0 - ndotl * ndotl, 0.0)) / max(ndotl, 0.05), 16.0);
         float lateral = texelWorld + 0.5 * cell + footprint;
         float bias = ShadowBias * (1.0 + 6.0 * slope) + lateral * tanTheta * zPerBlock;

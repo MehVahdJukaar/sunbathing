@@ -2,28 +2,28 @@
   "pack": {
     "pack_format": 75,
     "description": [
-      "§6GODRAYS §r§8v1.11",
+      "§6GODRAYS §r§8v1.12",
       " §7by MehVahdJukaar"
 
     ],
-    "supported_formats": [34, 90],
+    "supported_formats": [34, 97],
     "min_format": 34,
-    "max_format": 90
+    "max_format": 97
   },
   "polytone": {
     "title": {
       "text": "",
       "extra": [
         { "text": "GODRAYS", "color": "gold", "bold": true },
-        { "text": " v1.11", "color": "dark_gray" },
+        { "text": " v1.12", "color": "dark_gray" },
         { "text": "\nby MehVahdJukaar", "color": "gray" }
       ]
     },
     "content": {
       "text": "",
       "extra": [
-        { "text": "Volumetric godrays and soft shadows for the vanilla sky.\n", "color": "white" },
-        { "text": "Shadows can be turned off from the config button on this screen.\n\n" },
+        { "text": "God rays from the sun and moon, with an optional lens flare and depth of field.\n", "color": "white" },
+        { "text": "Shadows are off by default, turn them on from the config button on this screen.\n\n" },
         {
           "text": "Discord",
           "color": "#5865F2",
@@ -38,9 +38,9 @@
     "entries": [
       {
         "directory": "reversed_z",
-        "formats": [88, 90],
+        "formats": [88, 97],
         "min_format": 88,
-        "max_format": 90
+        "max_format": 97
       },
       {
         "directory": "1.21.1",
@@ -62,9 +62,9 @@
           "require_config": "sunbathing:shadows_enabled"
         },
         "directory": "shadows_on",
-        "formats": [35, 90],
+        "formats": [35, 97],
         "min_format": 35,
-        "max_format": 90
+        "max_format": 97
       }
     ]
   }

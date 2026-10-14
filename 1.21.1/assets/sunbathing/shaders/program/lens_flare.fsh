@@ -1,10 +1,8 @@
 #version 150
 
-// 1.21.1 port of the base lens_flare.fsh: GLSL 150, plain uniforms, vanilla PostPass names.
-
 uniform sampler2D DiffuseSampler;
-uniform sampler2D InDepth;          // bound by Polytone with use_depth_buffer
-uniform sampler2D LensFlare;        // grayscale "nova" sprite, CC0 via OpenGameArt; from the samplers map
+uniform sampler2D InDepth;
+uniform sampler2D LensFlare;
 
 in vec2 texCoord;
 out vec4 fragColor;
@@ -15,16 +13,14 @@ uniform mat4 PolyProjMat;
 uniform mat4 PolyModelViewMat;
 uniform float PolySunAngle;
 
-// config slider via expression_uniforms
 uniform float FlareStrength;
 
 const float PI = 3.14159265;
 const float TRANSITION_WIDTH = radians(12.0);
 
-const float FLARE_HALF = 0.35;                  // sprite half-size, fraction of screen height
+const float FLARE_HALF = 0.35;
 const vec3  FLARE_TINT = vec3(1.0, 0.93, 0.80);
 
-// same sun/moon crossfade as godrays.fsh
 float sunWeight(float angle) {
     float t = mod(angle + PI, 2.0 * PI);
     if (t < TRANSITION_WIDTH) return t / TRANSITION_WIDTH;
@@ -34,7 +30,6 @@ float sunWeight(float angle) {
     else return (t - (2.0 * PI - TRANSITION_WIDTH)) / TRANSITION_WIDTH;
 }
 
-// screen uv in .xy, clip w in .z (> 0 means in front of the camera)
 vec3 getSunScreenPos() {
     vec3 dir = vec3(cos(PolySunAngle), sin(PolySunAngle), 0.0);
     vec3 camPos = PolyModelViewMat[3].xyz;
@@ -44,7 +39,6 @@ vec3 getSunScreenPos() {
     return vec3((clip.xy / clip.w) * 0.5 + 0.5, clip.w);
 }
 
-// 1.0 on open sky (classic depth: sky = 1.0)
 float skyAt(vec2 uv) {
     float depth = texture(InDepth, clamp(uv, 0.0, 1.0)).r;
     return step(0.999999, depth);
@@ -60,7 +54,6 @@ void main() {
         vec2 sunUV = sun.xy;
         float aspect = InSize.x / InSize.y;
 
-        // 5 taps so the flare fades smoothly as terrain crosses the sun
         vec2 tap = 3.0 / InSize;
         float visible = (skyAt(sunUV)
                        + skyAt(sunUV + vec2( tap.x, 0.0))
