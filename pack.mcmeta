@@ -38,8 +38,14 @@
     "entries": [
       {
         "directory": "reversed_z",
-        "formats": [88, 97],
+        "formats": [88, 96],
         "min_format": 88,
+        "max_format": 96
+      },
+      {
+        "directory": "26.3",
+        "formats": [97, 97],
+        "min_format": 97,
         "max_format": 97
       },
       {
