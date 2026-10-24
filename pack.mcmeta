@@ -2,7 +2,7 @@
   "pack": {
     "pack_format": 75,
     "description": [
-      "§6GODRAYS §r§8v1.12",
+      "§6GODRAYS §r§8v${version}",
       " §7by MehVahdJukaar"
 
     ],
@@ -15,7 +15,7 @@
       "text": "",
       "extra": [
         { "text": "GODRAYS", "color": "gold", "bold": true },
-        { "text": " v1.12", "color": "dark_gray" },
+        { "text": " v${version}", "color": "dark_gray" },
         { "text": "\nby MehVahdJukaar", "color": "gray" }
       ]
     },
