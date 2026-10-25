@@ -1,4 +1,5 @@
 {
+  "polytone_ignore": true,
   "activation_condition": "config('sunbathing:shadows_enabled') && g.skyType()==1",
   "post_chain": "sunbathing:shadows",
   "use_depth_buffer": true,
