@@ -23,7 +23,7 @@
       "text": "",
       "extra": [
         { "text": "God rays from the sun and moon, with an optional lens flare and depth of field.\n", "color": "white" },
-        { "text": "Shadows are off by default, turn them on from the config button on this screen.\n\n" },
+        { "text": "Shadows need the Polytone Shadows addon. Once installed, turn them on from the config button on this screen.\n\n" },
         {
           "text": "Discord",
           "color": "#5865F2",
@@ -58,18 +58,9 @@
         "polytone_condition": {
           "require_config": "sunbathing:shadows_enabled"
         },
-        "directory": "1.21.1_shadows_on",
-        "formats": [34, 34],
-        "min_format": 34,
-        "max_format": 34
-      },
-      {
-        "polytone_condition": {
-          "require_config": "sunbathing:shadows_enabled"
-        },
         "directory": "shadows_on",
-        "formats": [35, 97],
-        "min_format": 35,
+        "formats": [34, 97],
+        "min_format": 34,
         "max_format": 97
       }
     ]

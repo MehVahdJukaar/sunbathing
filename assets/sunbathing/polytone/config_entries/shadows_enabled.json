@@ -1,4 +1,5 @@
 {
+  "require_mods": "polytone_shadows",
   "default_value": false,
   "display_order": 20
 }
